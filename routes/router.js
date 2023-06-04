@@ -30,6 +30,9 @@ router.post("/login", (req, res) => {
         else res.json({ Status: "Error", Error: 'Wrong Email or Password' })
     })
 });
+
+//Create Employees
+
 router.post("/create", upload.single('image'), (req, res) => {
     console.log(req.body);
     console.log(req.file);
@@ -41,13 +44,25 @@ router.post("/create", upload.single('image'), (req, res) => {
             hash,
             req.body.address,
             req.file.filename,
+            req.body.salary
         ];
         console.log(values)
-        const sql = 'INSERT into employee(name, email, password, address, image) VALUES (?)';
+        const sql = 'INSERT into employee(name, email, password, address, image, salary) VALUES (?)';
         db.query(sql, [values], (err, data) => {
             if (err) return res.json(err)
             return res.json(data)
         })
     });
+});
+
+//get All Employees
+
+router.get("/employees", (req, res)=>{
+    const sql = "SELECT * from employee";
+    db.query(sql, (err, data)=>{
+        if(err) return res.json(err)
+        return res.json({Status:"Success" , result:data})
+    })
 })
+
 module.exports = router
