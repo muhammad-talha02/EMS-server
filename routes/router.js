@@ -57,12 +57,57 @@ router.post("/create", upload.single('image'), (req, res) => {
 
 //get All Employees
 
-router.get("/employees", (req, res)=>{
+router.get("/employees", (req, res) => {
     const sql = "SELECT * from employee";
-    db.query(sql, (err, data)=>{
-        if(err) return res.json(err)
-        return res.json({Status:"Success" , result:data})
+    db.query(sql, (err, data) => {
+        if (err) return res.json(err)
+        return res.json({ Status: "Success", result: data })
     })
-})
+});
 
+
+// get specific employye for edit
+
+router.get("/employee/:id", (req, res) => {
+    const id = req.params.id;
+    console.log(id)
+    const sql = "SELECT * from employee WHERE id = ?";
+    db.query(sql, [id], (err, data) => {
+        if (err) return res.json(err);
+        return res.json({ Status: 'Success', result: data })
+    })
+});
+
+
+// Update employee
+
+router.put("/employee/:id", (req, res) => {
+    const id = req.params.id;
+    console.log(id);
+    const values = [
+        req.body.name,
+        req.body.email,
+        req.body.salary,
+        req.body.address,
+    ]
+    console.log(values)
+    const sql = "UPDATE employee SET name = ? , email = ? , salary = ? , address =?  WHERE id = ?";
+    db.query(sql, [...values, id], (err, data) => {
+        if (err) return res.json(err);
+        return res.json({ Status: 'Success', result: data })
+    })
+});
+
+
+// Delete Employee
+
+router.delete("/employee/:id", (req, res) => {
+    const id = req.params.id;
+    console.log(id)
+    const sql = "DELETE from employee WHERE id = ?";
+    db.query(sql, [id], (err, data) => {
+        if (err) return res.json(err);
+        return res.json({ Status: 'Success', result: data })
+    })
+});
 module.exports = router
