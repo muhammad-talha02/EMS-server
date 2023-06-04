@@ -6,7 +6,8 @@ require("./db/connection")
 app.use(cors());
 const router = require("./routes/router")
 app.use(express.json())
-app.use(router)
+app.use(router);
+app.use(express.static("public"))
 
 
 
